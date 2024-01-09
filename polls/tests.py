@@ -61,11 +61,11 @@ class QuestionIndexViewTests(TestCase):
         Questions with a pub_date in the past are displayed on the
         index page.
         """
-        create_question(question_text="Past question.", days=-30)
+        past_question = create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ['<Question: Past question.>']
+            [past_question]
         )
 
     def test_future_question(self):
@@ -83,24 +83,24 @@ class QuestionIndexViewTests(TestCase):
         Even if both past and future questions exist, only past questions
         are displayed.
         """
-        create_question(question_text="Past question.", days=-30)
+        past_question = create_question(question_text="Past question.", days=-30)
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
-            response.context['latest_question_list'],
-            ['<Question: Past question.>']
+        response.context['latest_question_list'],
+        [past_question]
         )
 
     def test_two_past_questions(self):
         """
         The questions index page may display multiple questions.
         """
-        create_question(question_text="Past question 1.", days=-30)
-        create_question(question_text="Past question 2.", days=-5)
+        past_question1 = create_question(question_text="Past question 1.", days=-30)
+        past_question2 = create_question(question_text="Past question 2.", days=-5)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
-            ['<Question: Past question 2.>', '<Question: Past question 1.>']
+            [past_question2, past_question1]
         )
 
 class QuestionDetailViewTests(TestCase):
