@@ -8,12 +8,12 @@ pipeline {
 		}
 		stage('Test') {
 			steps {
-				echo 'testing'
+				sh 'echo Testing' // Use the sh step to execute shell commands
 			}
 		}
-		stage('deploy') {
+		stage('Deploy') {
 			steps {
-				echo 'deploying'
+				sh 'echo Deploying'
 			}
 		}
 	}
