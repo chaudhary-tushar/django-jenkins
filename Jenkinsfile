@@ -13,7 +13,7 @@ pipeline {
 		}
 		stage('Deploy') {
 			steps {
-				sh 'ssh deployment-user@app-server "source denv/bin/activate; \
+				sh 'ssh -o StrictHostKeyChecking=no deployment-user@app-server "source denv/bin/activate; \
 				cd polling; \
 				git pull origin main;\
 				pip3 install -r requirements.txt --no-warn-script-location; \
