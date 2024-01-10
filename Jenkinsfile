@@ -13,7 +13,14 @@ pipeline {
 		}
 		stage('Deploy') {
 			steps {
-				sh 'echo Deploying'
+				sh 'ssh deployment-user@app-server "source denv/bin/activate; \
+				cd polling; \
+				git pull origin main;\
+				pip3 install -r requirements.txt --no-warn-script-location; \
+				python3 manage.py migrate; \
+				deactivate; \
+				sudo systemctl restart nginx; \
+				sudo systemctl restart gunicorn "'
 			}
 		}
 	}
